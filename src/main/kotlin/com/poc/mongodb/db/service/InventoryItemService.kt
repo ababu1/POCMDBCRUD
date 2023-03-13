@@ -10,31 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class InventoryItemsService(val inventoryItemsRepository: InventoryItemsRepository,
-                            val inventoryItemRepository: InventoryItemRepository,
-                            val inventoryLevelRepository: InventoryLevelRepository
+class InventoryItemService(
+    val inventoryItemsRepository: InventoryItemsRepository,
+    val inventoryItemRepository: InventoryItemRepository,
+    val inventoryLevelRepository: InventoryLevelRepository
 ) {
-    fun addInventoryItem(orgInventoryItem: OrgInventoryItems):OrgInventoryItems {
-        orgInventoryItem.inventoryItems.forEach { f ->
 
-            var item = inventoryItemRepository.save(InventoryItem(sku = f.sku,
+    fun addInventoryItem(orgInventoryItem: OrgInventoryItems):OrgInventoryItems {
+
+        orgInventoryItem.inventoryItems.forEach { f ->
+            val item = inventoryItemRepository.save(InventoryItem(sku = f.sku,
                 effectiveTs = f.effectiveTs,
                 orgid =orgInventoryItem.org.id.toString(),
             ))
 
-            f.inventoryLevels.forEach { l->
+            f.inventoryLevels.forEach { l ->
                 inventoryLevelRepository.save(
                     InventoryLevel(
 //                        sku = f.sku,
-//                        orgId = orgInventoryItem.org.id.toString(),
+//                        orgId =orgInventoryItem.org.id.toString(),
                         count = l.count,
                         locationId = l.locationId,
-                        orgSku = item
-                    )
+                        orgSku = item)
                 )
             }
         }
-
         return orgInventoryItem
     }
 
