@@ -15,21 +15,27 @@ class InventoryItemsService(val inventoryItemsRepository: InventoryItemsReposito
                             val inventoryLevelRepository: InventoryLevelRepository
 ) {
     fun addInventoryItem(orgInventoryItem: OrgInventoryItems):OrgInventoryItems {
+
         orgInventoryItem.inventoryItems.forEach { f ->
 
-            var item = inventoryItemRepository.save(InventoryItem(sku = f.sku,
-                effectiveTs = f.effectiveTs,
-                orgid =orgInventoryItem.org.id.toString(),
-            ))
+            val itemPrev = inventoryItemRepository.findBySkuNOrg(f.sku,orgInventoryItem.org.id.toString())
+
+            val item = itemPrev.isEmpty?.let {
+                inventoryItemRepository.save(
+                    InventoryItem(
+                        sku = f.sku,
+                        effectiveTs = f.effectiveTs,
+                        orgid = orgInventoryItem.org.id.toString(),
+                    )
+                )
+            }
 
             f.inventoryLevels.forEach { l->
                 inventoryLevelRepository.save(
                     InventoryLevel(
-//                        sku = f.sku,
-//                        orgId = orgInventoryItem.org.id.toString(),
                         count = l.count,
                         locationId = l.locationId,
-                        orgSku = item
+                        orgSku = item!!
                     )
                 )
             }

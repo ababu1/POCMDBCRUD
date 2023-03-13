@@ -11,6 +11,9 @@ import java.util.Optional
 interface InventoryItemRepository: MongoRepository<InventoryItem, String> {
     @Query("{'inventoryItems.sku':?0}")
     fun findBySku(sku:String): Optional<List<OrgInventoryItems>>
+    @Query("{'inventoryItems.sku':?0, 'org.id':?0  }")
+    fun findBySkuNOrg(sku:String, orgId: String): Optional<InventoryItem>
+
     @Query("{'org.id':?0}")
     fun findByOrgId(id:String): Optional<OrgInventoryItems>
     @Query("{'org.id':?0}", delete = true)

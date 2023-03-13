@@ -6,6 +6,7 @@ import com.poc.mongodb.db.model.OrgInventoryItems
 import com.poc.mongodb.db.repository.InventoryItemRepository
 import com.poc.mongodb.db.repository.InventoryItemsRepository
 import com.poc.mongodb.db.repository.InventoryLevelRepository
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -19,6 +20,8 @@ class InventoryItemService(
     fun addInventoryItem(orgInventoryItem: OrgInventoryItems):OrgInventoryItems {
 
         orgInventoryItem.inventoryItems.forEach { f ->
+            val itemPrev = inventoryItemRepository.findBySkuNOrg(f.sku,orgInventoryItem.org.id.toString())
+
             val item = inventoryItemRepository.save(InventoryItem(sku = f.sku,
                 effectiveTs = f.effectiveTs,
                 orgid =orgInventoryItem.org.id.toString(),
@@ -27,8 +30,6 @@ class InventoryItemService(
             f.inventoryLevels.forEach { l ->
                 inventoryLevelRepository.save(
                     InventoryLevel(
-//                        sku = f.sku,
-//                        orgId =orgInventoryItem.org.id.toString(),
                         count = l.count,
                         locationId = l.locationId,
                         orgSku = item)
@@ -57,6 +58,10 @@ class InventoryItemService(
     fun getInventoryItemByOrgId(org_id:String):OrgInventoryItems =inventoryItemsRepository.findByOrgId(org_id).orElseThrow{ throw RuntimeException("Cannot find Inventory by Org id") }
 
     fun deleteInventoryItem(id:String)=inventoryItemsRepository.deleteByOrgId(id)
+
+    fun findById(id: String): InventoryItem =
+        inventoryItemRepository.findById(id)
+            .orElseThrow { throw RuntimeException("Inventory with id $id not found") }
 
 
 }
