@@ -3,11 +3,10 @@ package com.poc.mongodb.db.model
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
-@Document(collection="inventoryitem")
+@Document(collection="inventory_item")
 data class InventoryItem (
     @Id
     val id : String? = null,
     var sku: String,
-    var effectiveTs: String,
-    var orgid: String
+    var orgId: String
 )
