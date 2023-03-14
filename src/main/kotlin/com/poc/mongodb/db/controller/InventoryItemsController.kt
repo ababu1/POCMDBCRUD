@@ -19,39 +19,25 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/orginventoryitems")
-class InventoryItemsController(@Autowired val inventoryItemService: InventoryItemService) {
+class InventoryItemsController(@Autowired val inventoryItemsService: InventoryItemsService) {
 
-    @PostMapping("/create")
-    fun addInventoryItem(@RequestBody orgInventoryItem: OrgInventoryItems) : ResponseEntity<String> {
-        inventoryItemService.addInventoryItem(orgInventoryItem)
+    @PostMapping("/publishInventoryItem")
+    fun pushMessageToEH(@RequestBody orgInventoryItem: OrgInventoryItems) : ResponseEntity<String> {
+        inventoryItemsService.publishEvents(orgInventoryItem)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
-    @GetMapping("/ALL")
-    fun getAllInventory():ResponseEntity<List<OrgInventoryItems>>
-            = ResponseEntity.ok(inventoryItemService.getAllInventoryItems())
-
-    @GetMapping("/{sku}")
-    fun getInventoryItemBySku(@PathVariable sku:String) : ResponseEntity<List<OrgInventoryItems>>
-            = ResponseEntity.ok(inventoryItemService.getInventoryItemBySku(sku))
-
-    @GetMapping("/ById/{id}")
-    fun getInventoryItemById(@PathVariable id:String) : ResponseEntity<InventoryItem>
-            = ResponseEntity.ok(inventoryItemService.findById(id))
-    @GetMapping("/{org_id}")
-    fun getInventoryItemByOrgId(@PathVariable org_id:String) : ResponseEntity<OrgInventoryItems>
-            = ResponseEntity.ok(inventoryItemService.getInventoryItemByOrgId(org_id))
-
-    @DeleteMapping("/{id}")
-    fun deleteInventoryByOrgId(@PathVariable id:String):ResponseEntity<String> {
-        inventoryItemService.deleteInventoryItem(id)
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+    @GetMapping("/consumeInventoryItem")
+    fun consumeMessageFromEH() : ResponseEntity<String> {
+        inventoryItemsService.consumeEvents()
+        return ResponseEntity.status(HttpStatus.OK).build()
     }
 
-    @PatchMapping("/update")
-    fun updateInventorybyOrgId(@RequestBody orgInventoryItem: OrgInventoryItems): ResponseEntity<String> {
-        inventoryItemService.updateInventoryItem(orgInventoryItem)
-        return ResponseEntity.ok().build()
+    @PostMapping("/create")
+    fun addInventoryItem(@RequestBody orgInventoryItem: OrgInventoryItems) : ResponseEntity<String> {
+        inventoryItemsService.addInventoryItem(orgInventoryItem)
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
+
 
 }
