@@ -26,15 +26,14 @@ class InventoryLevelMongoTemplateRepoImpl : InventoryLevelMongoTemplateRepo {
         return runCatching {
             val updateDefinition: Update = if (operation == SetOrAdjust.SET) {
                 Update().set("count", level.count)
-//                Update().set("effectiveTs", level.effectiveTs)
             } else {
                 Update().inc("count", level.count)
-//                Update().addToSet("effectiveTs", level.effectiveTs)
             }
             val query: Query = Query().addCriteria(Criteria.where("itemDetail.sku").`is`(level.itemDetail.sku))
                 .addCriteria(Criteria.where("itemDetail.orgId").`is`(level.itemDetail.orgId))
                 .addCriteria(Criteria.where("facilityId").`is`(level.facilityId))
 
+            updateDefinition.set("effectiveTs", level.effectiveTs)
             mongoTemplate.upsert(query, updateDefinition, InventoryLevel::class.java).upsertedId.toString()
         }
     }
