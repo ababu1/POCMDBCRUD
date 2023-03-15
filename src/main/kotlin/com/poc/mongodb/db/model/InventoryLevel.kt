@@ -9,8 +9,8 @@ data class InventoryLevel (
     @Id
     val id : String? = null,
     var count: Int,
-    var locationId: String,
-    var effectiveTs: String,
+    var facilityId: String,
+    var effectiveTs: String?,
     var itemDetail: ItemDetail
 )
 

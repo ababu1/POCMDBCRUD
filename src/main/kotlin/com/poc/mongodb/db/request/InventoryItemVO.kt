@@ -10,7 +10,7 @@ enum class SetOrAdjust {
 data class InventoryLevelVO(
     val id:ObjectId? = null,
     var count: Int,
-    var locationId: String
+    var facilityId: String
 )
 
 

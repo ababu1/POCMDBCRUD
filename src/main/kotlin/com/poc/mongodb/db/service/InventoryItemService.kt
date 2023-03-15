@@ -7,7 +7,10 @@ import com.poc.mongodb.db.repository.InventoryItemMongoTemplateRepo
 import com.poc.mongodb.db.repository.InventoryItemRepo
 import com.poc.mongodb.db.repository.InventoryLevelMongoTemplateRepo
 import com.poc.mongodb.db.repository.InventoryLevelRepo
+import com.poc.mongodb.db.request.FacilityResponseVO
+import com.poc.mongodb.db.request.FacilitySummaryVO
 import com.poc.mongodb.db.request.InventoryItemsPayLoad
+import com.poc.mongodb.db.request.ItemSummaryVO
 import com.poc.mongodb.db.request.SetOrAdjust
 import org.springframework.stereotype.Service
 
@@ -29,7 +32,7 @@ class InventoryItemService(
                 inventoryLevelMongoTemplateRepo.upsertInventoryLevel(
                     InventoryLevel(
                         count = l.count,
-                        locationId = l.locationId,
+                        facilityId = l.facilityId,
                         effectiveTs = f.effectiveTs,
                         itemDetail = ItemDetail(f.sku, payLoad.org.id)
                     ),
@@ -39,4 +42,12 @@ class InventoryItemService(
         }
         return payLoad
     }
+
+    fun getInventoryItemByOrg(org:String, sku:List<String>, facilityId:List<String>): FacilityResponseVO? {
+
+        val facilityResponse = inventoryLevelMongoTemplateRepo.findByOrglistofSkuNLication(org,sku,facilityId)
+
+        return facilityResponse
+    }
+
 }
