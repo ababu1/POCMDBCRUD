@@ -12,6 +12,7 @@ import com.poc.mongodb.db.request.FacilitySummaryVO
 import com.poc.mongodb.db.request.InventoryItemsPayLoad
 import com.poc.mongodb.db.request.ItemSummaryVO
 import com.poc.mongodb.db.request.SetOrAdjust
+import org.bson.Document
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,6 +47,12 @@ class InventoryItemService(
     fun getInventoryItemByOrg(org:String, sku:List<String>, facilityId:List<String>): FacilityResponseVO? {
 
         val facilityResponse = inventoryLevelMongoTemplateRepo.findByOrglistofSkuNLication(org,sku,facilityId)
+
+        return facilityResponse
+    }
+    fun getInventoryItemByOrgDoc(org:String, sku:List<String>, facilityId:List<String>): List<Document>? {
+
+        val facilityResponse = inventoryLevelMongoTemplateRepo.findByOrglistofSkuNLicationDoc(org,sku,facilityId)
 
         return facilityResponse
     }

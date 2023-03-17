@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.bson.Document
 
 @RestController
 @RequestMapping("/api/orginventoryitems")
@@ -33,6 +34,10 @@ class InventoryItemsController(@Autowired val inventoryItemService: InventoryIte
     @GetMapping("/ByOrg/{org}/{sku}/{locationId}")
     fun getInventoryItemByOrg(@PathVariable org:String, @PathVariable sku:List<String>, @PathVariable locationId:List<String>) : ResponseEntity<FacilityResponseVO>
             = ResponseEntity.ok(inventoryItemService.getInventoryItemByOrg(org, sku,locationId))
+
+    @GetMapping("/ByOrgDoc/{org}/{sku}/{locationId}")
+    fun getInventoryItemByOrgDoc(@PathVariable org:String, @PathVariable sku:List<String>, @PathVariable locationId:List<String>) : ResponseEntity<List<Document>>
+            = ResponseEntity.ok(inventoryItemService.getInventoryItemByOrgDoc(org, sku,locationId))
 
 
 }

@@ -11,6 +11,15 @@ data class FacilitySummaryVO (
 )
 
 data class FacilityResponseVO (
-    var org: String,
+    var org: String?,
     var facilitySummary: List<FacilitySummaryVO> = emptyList()
+)
+
+data class Items(
+    val sku:String,
+    val availableQuantity:Int
+)
+data class ItemSummaryVO1(
+    var facilityId: String,
+    val items:Items
 )
